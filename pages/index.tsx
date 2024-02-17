@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
+import { Button } from './components/Button';
 
 export default function Home() {
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -43,6 +44,7 @@ export default function Home() {
       <main className="min-h-screen p-10 bg-gray-100 text-black">
         <div className="text-7xl">🧑‍🍳</div>
         <h1 className="text-5xl p-2 font-bold">ChefAI</h1>
+        <button>Click me</button>
         <h2 className="text-xl p-2 font-normal">
           Generate recipes with AI based on ingredients and cook time
         </h2>

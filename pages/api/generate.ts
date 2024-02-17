@@ -1,46 +1,54 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import fetch from 'node-fetch'; // Import the fetch library
 
-const post = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { ingredients, cookTime } = req.body as {
-    ingredients: string[];
-    cookTime: number;
-  };
+export default async function handler(req, res) {
+  try {
+    if (req.method !== 'POST') {
+      // Only allow POST requests
+      res.status(405).json({ error: 'Method Not Allowed' });
+      return;
+    }
 
-  const prompt = `I have these ingredients: ${ingredients.join(
-    ", "
-  )}. Suggest 3 different recipes I can cook in under ${cookTime} minutes. The response should be 3 paragraphs. Don't include ingredient lists etc. in the response, and no decorative text like "Here's a recipe for you" or "Another recipe you'd enjoy...".`;
+    const { ingredients, cookTime } = req.body;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [{ content: prompt, role: "user" }],
-    }),
-  });
+    const prompt = `I have these ingredients: ${ingredients.join(
+      ", "
+    )}. Suggest 3 different recipes I can cook in under ${cookTime} minutes. The response should be 3 paragraphs. Don't include ingredient lists etc. in the response, and no decorative text like "Here's a recipe for you" or "Another recipe you'd enjoy...".`;
 
-  const data = await response.json();
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ content: prompt, role: "user" }],
+      }),
+    });
 
-  const recipes = data.choices[0].message.content
-    .split("\n")
-    .filter((line: string | any[]) => line.length > 0);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch response: ${response.status} ${response.statusText}`);
+    }
 
-  res.status(200).json({
-    recipes: [recipes[0], recipes[1], recipes[2]],
-  });
-};
+    const data = await response.json();
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  switch (req.method) {
-    case "POST":
-      await post(req, res);
-      break;
-    default:
-      res.status(405).end();
+    if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
+      throw new Error("Invalid response data: missing or empty 'choices' array");
+    }
+
+    const content = data.choices[0]?.message?.content;
+
+    if (typeof content !== 'string') {
+      throw new Error("Invalid response data: 'content' is not a string");
+    }
+
+    const recipes = content.split("\n").filter(line => line.trim().length > 0);
+
+    res.status(200).json({
+      recipes: recipes.slice(0, 3), // Take top 3 recipes
+    });
+  } catch (error) {
+    console.error("Error in API handler:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-};
-
-export default handler;
+}
