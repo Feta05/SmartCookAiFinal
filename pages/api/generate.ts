@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     const prompt = `I am a ${level} cook and I have these ingredients: ${ingredients.join(
       ", "
-    )}. Suggest 3 different recipes I can cook in under ${cookTime} minutes. The response should be 3 paragraphs. Don't include ingredient lists etc. in the response, and no decorative text like "Here's a recipe for you" or "Another recipe you'd enjoy...".`;
+    )}. Suggest 3 different recipes I can cook in under ${cookTime} minutes. The response should be 3 paragraphs with a step by step guide on how to start with the cooking . Don't include ingredient lists and start by naming the dish and then go on how to cook  it etc. in the response, and no decorative text like "Here's a recipe for you" or "Another recipe you'd enjoy...".`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",

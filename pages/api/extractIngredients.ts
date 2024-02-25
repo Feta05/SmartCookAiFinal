@@ -22,7 +22,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "gpt-4-vision-preview",
                 messages: [{ content, role: "user" }],
-                max_tokens: 300
+                max_tokens: 3000
             }),
         });
 

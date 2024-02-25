@@ -95,7 +95,7 @@ export default function Home() {
       
       <main className="min-h-screen  p-10 bg-gradient-to-t bg-black   ">
       <Header />
-        <div className="flex flex-col items-center mt-10">
+        <div className="flex flex-col items-center ">
           
           <div className="flex flex-col w-[500px]">
             <div className="flex flex-col items-center mb-24">
@@ -105,18 +105,25 @@ export default function Home() {
             </div>
             {/* Separate form or input field for image upload */}
             <div className="mb-10">
-              <label htmlFor="imageUpload" className="text-white gap-2 text-sm font-bold block">
+              <label htmlFor="imageUpload" className="text-white gap-2 text-sm font-bold block mb-3">
+              <span
+                      className="inline-flex items-center justify-center mr-2 font-bold  rounded-full sm:mb-0 aspect-square h-7 bg-white text-black">0</span>
                 Upload Image
               </label>
-              <input
+              <label htmlFor="imageUpload" className=" w-full inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full py-1 px-3 bg-pink-400/10 text-pink-400 ring-1 ring-inset ring-pink-400/20 hover:bg-pink-400/10 hover:text-pink-300 hover:ring-pink-300 cursor-pointer">
+                Choose File
+                <input
                   type="file"
                   id="imageUpload"
                   accept="image/*"
                   onChange={handleImageSubmit}
                   disabled={loading}
-                  className="w-full py-2 pl-3 rounded-md bg-white text-base text-zinc-500 transition hover:ring-zinc-900/20"
-              />
+                  className="hidden"
+                />
+              </label>
             </div>
+
+
 
             <form onSubmit={handleSubmit}>
               <div className=" mb-10">
@@ -124,7 +131,7 @@ export default function Home() {
 
                 <label htmlFor="ingredientInput" className="text-white gap-2 text-sm  font-bold block">
                   <span
-                      className="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">1</span>
+                      className="inline-flex items-center justify-center mr-2 font-bold  rounded-full sm:mb-0 aspect-square h-7 bg-white text-black">1</span>
                   Ingredients
                 </label>
 
@@ -134,7 +141,7 @@ export default function Home() {
                   value={ingredientInput}
                   onChange={(e) => setIngredientInput(e.target.value)}
                   placeholder="chocolate, milk"
-                  className="w-full py-2 pl-3 rounded-md bg-white text-base text-zinc-500 ring-1 ring-zinc-900/10 transition hover:ring-zinc-900/20 dark:bg-white/5 dark:text-zinc-400 dark:ring-inset dark:ring-white/10 mt-2 dark:hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none"
+                  className="w-full py-2 pl-3 rounded-md ring-1 bg-white/5 text-zinc-400 ring-inset ring-white/10 mt-2 hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none"
                 />
               </div>
               <div className="mb-10">
@@ -146,7 +153,7 @@ export default function Home() {
                   id="cookTime"
                   value={cookTime || ""}
                   onChange={(e) => setCookTime(Number(e.target.value))}
-                  className="block pr-10 mt-1 w-full py-2 pl-3 rounded-md bg-white text-base text-zinc-500 ring-1 ring-zinc-900/10 transition hover:ring-zinc-900/20 dark:bg-white/5 dark:text-zinc-400 dark:ring-inset dark:ring-white/10 dark:hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none"
+                  className="block pr-10 mt-1 w-full py-2 pl-3 rounded-md  text-base  ring-1  bg-white/5 text-zinc-400 ring-inset ring-white/10 hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none"
                 >
                   <option value="">Select Cook Time</option>
                   <option value="15">15 mins</option>
@@ -160,14 +167,14 @@ export default function Home() {
               </div>
               <div className="mb-10">
               <label htmlFor="cookTime" className="text-white gap-2 text-sm  font-bold block">
-                <span className="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">3</span>
+                <span className="inline-flex items-center justify-center mr-2 font-bold  rounded-full sm:mb-0 aspect-square h-7 bg-white text-black">3</span>
                   Food level:
                 </label>
                 <select
                   id="foodLevel"
                   value={foodLevel}
                   onChange={(e) => setFoodLevel(e.target.value)}
-                  className="block pr-10 mt-1 w-full py-2 pl-3 rounded-md bg-white text-base text-zinc-500 ring-1 ring-zinc-900/10 transition hover:ring-zinc-900/20 dark:bg-white/5 dark:text-zinc-400 dark:ring-inset dark:ring-white/10 dark:hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none"
+                  className="block pr-10 mt-1 w-full py-2 pl-3 rounded-md text-base ring-1 bg-white/5 text-zinc-400 ring-inset ring-white/10 hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none"
                 >
                   <option value="beginner">Beginner</option>
                   <option value="intermediate">Intermediate</option>
@@ -177,7 +184,7 @@ export default function Home() {
               <div className="">
                 <button
                   type="submit"
-                  className={`mb-8 w-full inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-pink-400/10 dark:text-pink-400 dark:ring-1 dark:ring-inset dark:ring-pink-400/20 dark:hover:bg-pink-400/10 dark:hover:text-pink-300 dark:hover:ring-pink-300 ${
+                  className={`mb-8 w-full inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full py-1 px-3  bg-pink-400/10 text-pink-400 ring-1 ring-inset ring-pink-400/20 hover:bg-pink-400/10 hover:text-pink-300 hover:ring-pink-300 ${
                     (ingredientInput.length === 0 || cookTime === null || loading) && ""
                   }`}
                   disabled={ingredientInput.length === 0 || cookTime === null || loading}
@@ -191,7 +198,7 @@ export default function Home() {
         <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-32">
           {recipes &&
             recipes.map((recipe, index) => (
-              <div key={index} className="p-4 rounded-md bg-white text-base text-zinc-500 ring-1 ring-zinc-900/10 transition hover:ring-zinc-900/20 dark:bg-white/5 dark:text-zinc-400 dark:ring-inset dark:ring-white/10 dark:hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none">
+              <div key={index} className="p-4 rounded-md  text-base  ring-1  transition  bg-white/5 text-zinc-400 ring-inset ring-white/10 hover:ring-white/20 focus:[&:not(:focus-visible)]:outline-none">
                 <h3 className="text-2xl p-2 font-bold">Recipe {index + 1}</h3>
                 <p className="p-2 m-2 text-white">{recipe}</p>
               </div>
