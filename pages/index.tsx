@@ -37,6 +37,52 @@ export default function Home() {
     setLoading(false);
   };
 
+  const handleImageSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const imageInput = document.getElementById("imageUpload") as HTMLInputElement;
+    const imageFile = imageInput.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+    reader.onloadend = async () => {
+      const base64_image = reader.result?.toString();
+
+      const content = [
+        {
+          "type": "text",
+          "text": "Based on Image tell the list of ingredients with commas, like chocolate,milk.. etc",
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": base64_image,
+          },
+        },
+      ];
+
+      const res = await fetch("/api/extractIngredients", {
+        method: "POST",
+        body: JSON.stringify({ content }), // Send the content array
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+      console.log(data.ingredients);
+      setIngredientInput(data.ingredients.choices[0].message.content); // Assuming the response contains ingredients
+
+      setLoading(false);
+    };
+  };
+
   return (
     <>
       <Head>
@@ -57,17 +103,33 @@ export default function Home() {
               
               <h2 className="text-l  font-normal text-white">Generate recipes with AI based on ingredients and cook time</h2>
             </div>
+            {/* Separate form or input field for image upload */}
+            <div className="mb-10">
+              <label htmlFor="imageUpload" className="text-white gap-2 text-sm font-bold block">
+                Upload Image
+              </label>
+              <input
+                  type="file"
+                  id="imageUpload"
+                  accept="image/*"
+                  onChange={handleImageSubmit}
+                  disabled={loading}
+                  className="w-full py-2 pl-3 rounded-md bg-white text-base text-zinc-500 transition hover:ring-zinc-900/20"
+              />
+            </div>
+
             <form onSubmit={handleSubmit}>
               <div className=" mb-10">
-                
-                
-                  <label htmlFor="ingredientInput" className="text-white gap-2 text-sm  font-bold block">
-                  <span class="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">1</span>
-                    Ingredients
-                  </label>
-                
+
+
+                <label htmlFor="ingredientInput" className="text-white gap-2 text-sm  font-bold block">
+                  <span
+                      className="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">1</span>
+                  Ingredients
+                </label>
+
                 <input
-                  type="text"
+                    type="text"
                   id="ingredientInput"
                   value={ingredientInput}
                   onChange={(e) => setIngredientInput(e.target.value)}
@@ -77,7 +139,7 @@ export default function Home() {
               </div>
               <div className="mb-10">
                 <label htmlFor="cookTime" className="text-white gap-2 text-sm  font-bold block">
-                <span class="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">2</span>
+                <span className="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">2</span>
                   Time
                 </label>
                 <select
@@ -98,7 +160,7 @@ export default function Home() {
               </div>
               <div className="mb-10">
               <label htmlFor="cookTime" className="text-white gap-2 text-sm  font-bold block">
-                <span class="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">3</span>
+                <span className="inline-flex items-center justify-center mr-2 font-bold text-white bg-black rounded-full sm:mb-0 aspect-square h-7 dark:bg-white dark:text-black">3</span>
                   Food level:
                 </label>
                 <select

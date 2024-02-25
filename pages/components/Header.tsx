@@ -24,7 +24,7 @@ function TopLevelNavItem({ href, children, target, rel }: TopLevelNavItemProps) 
   )
 }
 
-export const Header = forwardRef(function Header({ className }, ref) {
+export const Header = forwardRef(function Header( className: any , ref: any) {
   return (
     <div
       ref={ref}

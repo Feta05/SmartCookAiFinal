@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore
 import { clsx } from '../utils/clsx';
 import Image from 'next/image';
 
